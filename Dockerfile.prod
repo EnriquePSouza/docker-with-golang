@@ -1,0 +1,15 @@
+FROM golang:alpine AS builder
+
+WORKDIR /usr/src/go_app
+
+COPY . .
+
+RUN go build -ldflags '-s -w' full-cycle.go
+
+FROM scratch
+
+WORKDIR /app
+
+COPY --from=builder /usr/src/go_app /app
+
+CMD [ "./full-cycle" ]
